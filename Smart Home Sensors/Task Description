@@ -1,0 +1,30 @@
+Last summer you installed a Smart Home system at your parents’ place, but this move cost you a lot of headache. One of the sensors malfunction which resulted in that the indoor temperature was all over the place. One day it could be hot like in a sauna indoors and the next day you would need to wear mittens. In the end you found, and replaced, the malfunctioning sensor but it took a long time to find out what the problem was.
+
+This year when taking a course in embedded systems you remembered the ordeal from last summer and wanted to come up with a solution. The end goal is to make the Smart Home a little bit smarter, to have it report that one of its sensors is malfunctioning. In your prototype you have installed not one, but two, of each sensor (two sensors measuring the temperature in the kitchen instead of just one). The idea is to create a script that can check if the measurements from the two sensors deviate too much, if they do, there is most likely a problem with one of the sensors.
+
+Luckily the Smart Home have an export function allowing all the measurements from the primary sensors to be stored in one file and all the measurements from the secondary sensors (the validation sensors) to be stored in another file. Each file will contain a pickled dictionary on the following format:
+
+{‘Kitchen’: ‘24°’, ’Master bedroom’: ’23°’}
+What the script needs to do is to take the path to two of these measurement files as command line arguments and then figure out if the values from the two files deviate too much. Currently the threshold for what is too much shall be set to two degrees. The script needs to implement the following functions:
+
+read_file(filename)
+Shall use pickle to load the dictionary stored in the file referenced by the parameter filename. The function shall return the read dictionary, or raise a FileNotFoundError if the filename is not valid.
+
+map_to_int(measurements)
+The parameter measurements is a dictionary on the format described earlier, a tag describing where the sensor is located, and a temperature value. Note that both are strings and that the temperature value is followed by a degree sign.  This function shall create a new dictionary that contains the same tags as the measurements dictionary but where all the values are integers. An example: {'Kitchen': '20°'} shall become {'Kitchen': 20}. The new dictionary shall be returned from the function.
+
+find_faulty(primary, secondary, threshold)
+This function takes two dictionaries on the format {'Kitchen': 20} together with an integer value called threshold as parameters. The function shall compare each key-value pair in the primary dictionary to the same pair in the secondary dictionary and if the difference between the two values is greater than the threshold value, the key shall be added to a set. After having compared all the key-value pairs the set shall be returned from the function.
+
+display_warnings(faulty_sensors)
+The faulty_sensors parameter is a set containing all the sensor tags (as strings) where the difference was too big between the primary and secondary sensors. The function shall display a message containing all the sensor tags on the following format:
+
+Analyzis of the provided files is complete.
+-------------------------------------------
+
+The following sensors differ more than 2°:
+Kitchen
+main()
+This function shall use the command line arguments to read the primary and secondary sensor values from the specified files and then continue to prepare the dictionaries so that they meet the requirements needed to call the function that finds the faulty sensors. Finally the function shall find and print the faulty sensors. The main function shall use the other functions to accomplish its tasks and it shall have error handling that prints the message below if the files given as command line arguments are not valid:
+
+Error: The files given as arguments are not valid.
